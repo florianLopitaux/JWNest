@@ -1,5 +1,7 @@
 package fr.jwnest.htmlmaker;
 
+import java.util.*;
+
 public enum HTMLTag {
     // MAIN ROOT
     HTML,
@@ -144,5 +146,50 @@ public enum HTMLTag {
 
     // WEB COMPONENTS
     SLOT,
-    TEMPLATE
+    TEMPLATE;
+
+
+    // ------------------------------------------------------------------------
+    // FIELDS
+    // ------------------------------------------------------------------------
+
+    private final Set<HTMLAttribute> authorizedAttributes;
+
+    // ------------------------------------------------------------------------
+    // CONSTRUCTOR
+    // ------------------------------------------------------------------------
+
+    HTMLTag(HTMLAttribute... attributes) {
+        this.authorizedAttributes = new HashSet<>(HTMLAttribute.GLOBAL_ATTRIBUTES);
+        this.authorizedAttributes.addAll(Arrays.asList(attributes));
+    }
+
+    // ------------------------------------------------------------------------
+    // GETTERS
+    // ------------------------------------------------------------------------
+
+    public Set<HTMLAttribute> getAuthorizedAttributes() {
+        return Collections.unmodifiableSet(authorizedAttributes);
+    }
+
+    // ------------------------------------------------------------------------
+    // OVERRIDE METHODS FROM Enum CLASS
+    // ------------------------------------------------------------------------
+
+    @Override
+    public String toString() {
+        return this.name().toLowerCase();
+    }
+
+    // ------------------------------------------------------------------------
+    // PUBLIC STATIC METHODS
+    // ------------------------------------------------------------------------
+
+    public static HTMLTag fromString(String tag) {
+        try {
+            return HTMLTag.valueOf(tag.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            return null;
+        }
+    }
 }

@@ -34,11 +34,11 @@ public class HTMLNode {
         this.value = value;
     }
 
-    public HTMLNode(HTMLTag tag, String value, String nodeName) {
+    public HTMLNode(HTMLTag tag, String value, EnumMap<HTMLAttribute, String> attributes) throws IllegalArgumentException {
         this(tag, value);
 
-        if (nodeName != null) {
-            this.name = nodeName;
+        for (Map.Entry<HTMLAttribute, String> entry : attributes.entrySet()) {
+            this.setAttribute(entry.getKey(), entry.getValue());
         }
     }
 
@@ -72,8 +72,12 @@ public class HTMLNode {
         return null;
     }
 
-    public Map<HTMLAttribute, String> getAttributes() {
+    public EnumMap<HTMLAttribute, String> getAttributes() {
         return new EnumMap<>(this.attributes);
+    }
+
+    public EnumSet<HTMLAttribute> getAuthorizedAttributes() {
+        return EnumSet.copyOf(this.attributes.keySet());
     }
 
     // ------------------------------------------------------------------------
@@ -113,8 +117,12 @@ public class HTMLNode {
         return found;
     }
 
-    public void setAttribute(HTMLAttribute attribute, String value) {
-        this.attributes.put(attribute, value);
+    public void setAttribute(HTMLAttribute attribute, String value) throws IllegalArgumentException {
+        if (this.tag.getAuthorizedAttributes().contains(attribute)) {
+            this.attributes.put(attribute, value);
+        } else {
+            throw new IllegalArgumentException("Attribute " + attribute + " not supported for this tag " + this.tag);
+        }
     }
 
     public boolean removeAttribute(HTMLAttribute attribute) {

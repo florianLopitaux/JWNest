@@ -1,5 +1,9 @@
 package fr.jwnest.htmlmaker;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 public enum HTMLAttribute {
     ACCEPT,
     ACCEPT__CHARSET,
@@ -113,5 +117,51 @@ public enum HTMLAttribute {
     USE_MAP,
     VALUE,
     WIDTH,
-    WRAP
+    WRAP;
+
+
+    // ------------------------------------------------------------------------
+    // FIELDS
+    // ------------------------------------------------------------------------
+
+    public static final Set<HTMLAttribute> GLOBAL_ATTRIBUTES = new HashSet<>(Arrays.asList(
+        HTMLAttribute.ACCESS_KEY, HTMLAttribute.AUTO_CAPITALIZE, HTMLAttribute.CLASS, HTMLAttribute.CONTENT_EDITABLE,
+        HTMLAttribute.DIR, HTMLAttribute.DRAGGABLE, HTMLAttribute.HIDDEN, HTMLAttribute.ID, HTMLAttribute.ITEM_PROP,
+        HTMLAttribute.LANG, HTMLAttribute.ROLE, HTMLAttribute.SLOT, HTMLAttribute.SPELLCHECK, HTMLAttribute.STYLE,
+        HTMLAttribute.TABINDEX, HTMLAttribute.TITLE, HTMLAttribute.TRANSLATE
+    ));
+
+    // ------------------------------------------------------------------------
+    // OVERRIDE METHODS FROM Enum CLASS
+    // ------------------------------------------------------------------------
+
+    @Override
+    public String toString() {
+        return this.name()
+                .toLowerCase()
+                .replaceAll("__", "-")
+                .replaceAll("_", "");
+    }
+
+    // ------------------------------------------------------------------------
+    // PUBLIC STATIC METHODS
+    // ------------------------------------------------------------------------
+
+    public static HTMLAttribute fromString(String attribute) {
+        try {
+            return HTMLAttribute.valueOf(attribute
+                    .toUpperCase()
+                    .replaceAll("-", "__"));
+
+        } catch (IllegalArgumentException e) {
+            // can be a special case with one '_' for separated words
+            for (HTMLAttribute attr : HTMLAttribute.values()) {
+                if (attr.toString().equals(attribute)) {
+                    return attr;
+                }
+            }
+
+            return null;
+        }
+    }
 }
