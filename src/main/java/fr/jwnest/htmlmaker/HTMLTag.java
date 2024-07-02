@@ -160,7 +160,7 @@ public enum HTMLTag {
     // ------------------------------------------------------------------------
 
     HTMLTag(HTMLAttribute... attributes) {
-        this.authorizedAttributes = new HashSet<>(HTMLAttribute.GLOBAL_ATTRIBUTES);
+        this.authorizedAttributes = new HashSet<>(HTMLAttribute.getGlobalAttributes());
         this.authorizedAttributes.addAll(Arrays.asList(attributes));
     }
 

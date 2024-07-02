@@ -1,6 +1,7 @@
 package fr.jwnest.htmlmaker;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -124,7 +125,7 @@ public enum HTMLAttribute {
     // FIELDS
     // ------------------------------------------------------------------------
 
-    public static final Set<HTMLAttribute> GLOBAL_ATTRIBUTES = new HashSet<>(Arrays.asList(
+    private static final Set<HTMLAttribute> GLOBAL_ATTRIBUTES = new HashSet<>(Arrays.asList(
         HTMLAttribute.ACCESS_KEY, HTMLAttribute.AUTO_CAPITALIZE, HTMLAttribute.CLASS, HTMLAttribute.CONTENT_EDITABLE,
         HTMLAttribute.DIR, HTMLAttribute.DRAGGABLE, HTMLAttribute.HIDDEN, HTMLAttribute.ID, HTMLAttribute.ITEM_PROP,
         HTMLAttribute.LANG, HTMLAttribute.ROLE, HTMLAttribute.SLOT, HTMLAttribute.SPELLCHECK, HTMLAttribute.STYLE,
@@ -146,6 +147,10 @@ public enum HTMLAttribute {
     // ------------------------------------------------------------------------
     // PUBLIC STATIC METHODS
     // ------------------------------------------------------------------------
+
+    public static Set<HTMLAttribute> getGlobalAttributes() {
+        return Collections.unmodifiableSet(HTMLAttribute.GLOBAL_ATTRIBUTES);
+    }
 
     public static HTMLAttribute fromString(String attribute) {
         try {

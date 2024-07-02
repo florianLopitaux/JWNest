@@ -25,7 +25,6 @@ public class HTMLNode {
         this.tag = tag;
         this.children = new ArrayList<>();
         this.attributes = new EnumMap<>(HTMLAttribute.class);
-
         this.name = UUID.randomUUID().toString();
     }
 
@@ -34,12 +33,17 @@ public class HTMLNode {
         this.value = value;
     }
 
-    public HTMLNode(HTMLTag tag, String value, EnumMap<HTMLAttribute, String> attributes) throws IllegalArgumentException {
-        this(tag, value);
+    public HTMLNode(HTMLTag tag, EnumMap<HTMLAttribute, String> attributes) throws IllegalArgumentException {
+        this(tag);
 
         for (Map.Entry<HTMLAttribute, String> entry : attributes.entrySet()) {
             this.setAttribute(entry.getKey(), entry.getValue());
         }
+    }
+
+    public HTMLNode(HTMLTag tag, String value, EnumMap<HTMLAttribute, String> attributes) throws IllegalArgumentException {
+        this(tag, attributes);
+        this.value = value;
     }
 
     // ------------------------------------------------------------------------
@@ -117,6 +121,14 @@ public class HTMLNode {
         return found;
     }
 
+    public void setAttribute(HTMLAttribute attribute) throws IllegalArgumentException {
+        if (this.tag.getAuthorizedAttributes().contains(attribute)) {
+            this.attributes.put(attribute, "");
+        } else {
+            throw new IllegalArgumentException("Attribute " + attribute + " not supported for this tag " + this.tag);
+        }
+    }
+
     public void setAttribute(HTMLAttribute attribute, String value) throws IllegalArgumentException {
         if (this.tag.getAuthorizedAttributes().contains(attribute)) {
             this.attributes.put(attribute, value);
@@ -132,6 +144,10 @@ public class HTMLNode {
     // ------------------------------------------------------------------------
     // PUBLIC METHODS
     // ------------------------------------------------------------------------
+
+    public boolean isLeaf() {
+        return this.children.isEmpty();
+    }
 
     public boolean hasChild(HTMLNode node) {
         return this.children.contains(node);
@@ -157,6 +173,45 @@ public class HTMLNode {
 
     public void clearAttributes() {
         this.attributes.clear();
+    }
+
+    public String serialize() {
+        return this.serialize(4);
+    }
+
+    public String serialize(int indent) {
+        return this.serialize(indent, indent);
+    }
+
+    // ------------------------------------------------------------------------
+    // PRIVATE METHODS
+    // ------------------------------------------------------------------------
+
+    private String serialize(int defaultIndentSpacesCount, int repeatIndentCount) {
+        final String indentChars = " ".repeat(repeatIndentCount);
+        final StringBuilder builder = new StringBuilder();
+
+        // build html open tag with all of this attributes
+        builder.append('<').append(this.tag);
+        for (final Map.Entry<HTMLAttribute, String> attribute : this.attributes.entrySet()) {
+            builder.append(' ').append(attribute.getKey()).append('=').append(attribute.getValue());
+        }
+        builder.append('>');
+
+        // build node value if its set
+        if (this.value != null) {
+            builder.append('\n').append(indentChars).append(this.value).append('\n');
+        }
+
+        // build all node's children
+        for (final HTMLNode child : this.children) {
+            builder.append('\n').append(indentChars).append(child.serialize(defaultIndentSpacesCount, repeatIndentCount + defaultIndentSpacesCount));
+        }
+
+        // close the html tag
+        builder.append("</").append(this.tag).append('>').append('\n');
+
+        return builder.toString();
     }
 
     // ------------------------------------------------------------------------
