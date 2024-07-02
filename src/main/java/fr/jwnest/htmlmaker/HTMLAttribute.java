@@ -46,7 +46,7 @@ public enum HTMLAttribute {
     FORM_ACTION,
     FORM_ENCTYPE,
     FORM_METHOD,
-    FORM_NOVALIDATE,
+    FORM_NO_VALIDATE,
     FORM_TARGET,
     HEADERS,
     HIDDEN,
@@ -98,6 +98,7 @@ public enum HTMLAttribute {
     SELECTED,
     SHAPE,
     SIZE,
+    SIZES,
     SLOT,
     SPAN,
     SPELLCHECK,
@@ -116,7 +117,6 @@ public enum HTMLAttribute {
     TYPE,
     USE_MAP,
     VALUE,
-    WIDTH,
     WRAP;
 
 
