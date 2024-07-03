@@ -104,11 +104,11 @@ public class HTMLNode {
         this.children.addAll(children);
     }
 
-    public boolean removeChild(HTMLNode child) {
+    public boolean removeChildren(HTMLNode child) {
         return this.children.remove(child);
     }
 
-    public boolean removeChild(String nodeName) {
+    public boolean removeChildren(String nodeName) {
         boolean found = false;
 
         for (final HTMLNode child : this.children) {
