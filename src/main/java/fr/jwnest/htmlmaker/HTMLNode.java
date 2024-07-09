@@ -76,6 +76,10 @@ public class HTMLNode {
         return null;
     }
 
+    public String getAttribute(HTMLAttribute attribute) {
+        return this.attributes.get(attribute);
+    }
+
     public EnumMap<HTMLAttribute, String> getAttributes() {
         return new EnumMap<>(this.attributes);
     }

@@ -16,10 +16,14 @@ public class HTMLHeadNode extends HTMLNode {
     private static final String SCRIPTS_NAME = "head-script-node";
 
     private String defaultPath;
-    private final HTMLNode titleNode;
+
     private final Set<String> cssFiles;
     private final Set<String> scriptFiles;
     private final List<String> scripts;
+
+    private final HTMLNode titleNode;
+    private final HTMLNode charsetEncoding;
+    private final HTMLNode viewport;
 
     // ------------------------------------------------------------------------
     // CONSTRUCTORS
@@ -36,6 +40,11 @@ public class HTMLHeadNode extends HTMLNode {
         this.scripts = new ArrayList<>();
 
         this.titleNode = new HTMLNode(HTMLTag.TITLE);
+        this.charsetEncoding = new HTMLNode(HTMLTag.META, new EnumMap<>(Map.of(HTMLAttribute.CHARSET, "UTF-8")));
+        this.viewport = new HTMLNode(HTMLTag.META, new EnumMap<>(Map.of(
+            HTMLAttribute.NAME, "viewport",
+            HTMLAttribute.CONTENT, "width=device-width,initial-scale=1"))
+        );
     }
 
     public HTMLHeadNode(String title) {
@@ -51,12 +60,36 @@ public class HTMLHeadNode extends HTMLNode {
         return this.defaultPath;
     }
 
+    public String getPageTitle() {
+        return this.titleNode.getValue();
+    }
+
+    public String getPageEncodingCharset() {
+        return this.charsetEncoding.getAttribute(HTMLAttribute.CHARSET);
+    }
+
+    public String getPageViewport() {
+        return this.viewport.getAttribute(HTMLAttribute.CONTENT);
+    }
+
     // ------------------------------------------------------------------------
     // SETTERS
     // ------------------------------------------------------------------------
 
     public void setDefaultPath(String defaultPath) {
         this.defaultPath = defaultPath;
+    }
+
+    public void setPageTitle(String title) {
+        this.titleNode.setValue(title);
+    }
+
+    public void setPageEncodingCharset(String encoding) {
+        this.charsetEncoding.setAttribute(HTMLAttribute.CHARSET, encoding);
+    }
+
+    public void setPageViewport(String viewport) {
+        this.viewport.setAttribute(HTMLAttribute.CONTENT, viewport);
     }
 
     public boolean addCssFile(String filepath) throws FileNotFoundException {
@@ -86,11 +119,13 @@ public class HTMLHeadNode extends HTMLNode {
         if (!this.titleNode.getValue().isEmpty()) {
             this.addChild(this.titleNode);
         }
+        this.addChild(this.charsetEncoding);
+        this.addChild(this.viewport);
 
         this.createCssNodes();
         this.createScriptNodes();
 
-        // now we create children of the head, serialize head node
+        // now, we can serialize the head node
         return super.serialize(indent);
     }
 
