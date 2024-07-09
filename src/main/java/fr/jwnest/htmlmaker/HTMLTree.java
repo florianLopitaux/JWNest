@@ -30,6 +30,46 @@ public class HTMLTree extends HTMLNode {
     }
 
     // ------------------------------------------------------------------------
+    // GETTERS
+    // ------------------------------------------------------------------------
+
+    public HTMLNode getHead() {
+        return this.head;
+    }
+
+    public HTMLNode getHeader() {
+        return this.header;
+    }
+
+    public HTMLNode getFooter() {
+        return this.footer;
+    }
+
+    // ------------------------------------------------------------------------
+    // SETTERS
+    // ------------------------------------------------------------------------
+
+    public void setHead(HTMLHeadNode head) {
+        this.head = head;
+    }
+
+    public void setHeader(HTMLNode header) {
+        if (header.getTag() != HTMLTag.HEADER) {
+            throw new IllegalArgumentException("HTMLNode passed isn't a header : " + header.getTag());
+        }
+
+        this.header = header;
+    }
+
+    public void setFooter(HTMLNode footer) {
+        if (footer.getTag() != HTMLTag.FOOTER) {
+            throw new IllegalArgumentException("HTMLNode passed isn't a footer : " + footer.getTag());
+        }
+
+        this.footer = footer;
+    }
+
+    // ------------------------------------------------------------------------
     // OVERRIDE METHODS FROM HTMLNode CLASS
     // ------------------------------------------------------------------------
 
